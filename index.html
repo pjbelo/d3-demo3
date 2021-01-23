@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Demo3</title>
+</head>
+
+
+<body>
+    
+<div>
+    <img id="animalImg" src="img/dog.jpg" width="300" />
+</div>
+
+<div id="text" style="font-size:40px">This is an animal.</div>
+
+<button onclick="change('img/cat.jpg')">Show Cat</button>
+<button onclick="change('img/dog.jpg')">Show Dog</button>
+<button onclick="changeColor()">Change color</button>
+
+
+</body>
+
+
+<script src="https://d3js.org/d3.v6.min.js"></script>
+
+<script>
+
+
+
+    function change(imgName) {
+        d3.select("#animalImg")
+            .attr("src", imgName)
+    }
+
+    function changeColor() {
+        let currentColor = d3.select("#text").style("color")
+        let nextColor = currentColor === "red" ? "black" : "red"
+        d3.select("#text")
+            .style("color", nextColor)
+    }
+
+
+    
+
+
+
+
+</script>
+
+</html>

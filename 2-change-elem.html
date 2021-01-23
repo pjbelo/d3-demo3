@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Demo3</title>
+</head>
+
+
+<body>
+    
+    <div id="page-header">
+        <h1>Hello World!</h1>
+    </div>
+    <p class="main-paragraph">This is an example</p>
+    <p>and this is the second paragraph</p>
+
+    <button onclick="change1()">Change first paragraph</button>
+    <button onclick="change2()">Change all paragraphs</button>
+    <button onclick="change3()">Change with HTML</button>
+    <button onclick="change4()">Change with text</button>
+
+
+</body>
+
+
+<script src="https://d3js.org/d3.v6.min.js"></script>
+
+<script>
+
+    function change1() {
+        let p = d3.select(".main-paragraph")
+        p.text("New text")
+    }
+
+    function change2() {
+        d3.selectAll("p").text("New text2")
+        
+    }
+
+    function change3() {
+        d3.select("p").html("<b>bold</b> normal")
+    }
+    
+    function change4() {
+        d3.select("p").text("<b>bold</b> normal")
+    }    
+
+
+
+</script>
+
+</html>
