@@ -18,7 +18,11 @@
 
     let container = d3.select("#container")
 
-    d3.csv("data/mydata.csv").then(writeData)
+    d3.csv("data/mydata.csv")
+        .then(writeData)
+        .catch(e => {
+            write ("error reading data")
+            console.log(e)})
 
     function writeData(data) {
         console.log(data)
