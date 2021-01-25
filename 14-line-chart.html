@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Demo3</title>
+    <style>
+        .line{
+            fill: none;
+            stroke: blue;
+        }
+    </style>
+</head>
+
+
+<body>
+    <svg id="container" height="300" width="500" style="border: solid 1px lightgrey">
+        <g id="body" style="transform:translate(50px,0px)"></g>
+    </svg>
+</body>
+
+
+<script src="https://d3js.org/d3.v6.min.js"></script>
+
+<script>
+
+    let body = d3.select("#body")
+    d3.csv("data/prices.csv").then(showData)
+
+    function showData(data) {
+
+        let bodyHeight = 200
+        let bodyWidth = 400
+
+        data = data.map(d => ({
+            date: new Date(d.date),
+            price: +d.price
+        }))
+
+        let maxPrice = d3.max(data, d => d.price)
+
+        let yScale = d3.scaleLinear()
+            .range([bodyHeight,0])
+            .domain([0,maxPrice])
+
+        let yAxis = d3.axisLeft(yScale)
+
+        body.append("g")
+            .call(yAxis)
+
+        let xScale = d3.scaleTime()
+            .range([0,bodyWidth])
+            .domain(d3.extent(data, d => d.date))
+
+        let xAxis = d3.axisBottom(xScale)
+            .tickFormat(d3.timeFormat("%b"))
+
+        body.append("g")
+            .attr("transform", "translate(0,"+bodyHeight+")")
+            .call(xAxis)
+
+        valueLine = d3.line()
+            .x(d => xScale(d.date))
+            .y(d => yScale(d.price))
+            .defined(d => !!d.price) // don't assume 0 if value not defined
+
+        body.append("path")
+            .datum(data) // use datum, not data -> only one data element
+            .attr("d", valueLine)
+            .attr("class","line")
+
+
+
+    }
+
+
+
+
+
+</script>
+
+</html>
