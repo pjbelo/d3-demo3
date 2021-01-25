@@ -4,16 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D3 Demo</title>
-    <style>
-        .links line {
-            stroke: black
-        }
-    </style>
 </head>
 
 <body>
     <svg id="container" height="300" width="500">
-        <g id="body" transform="translate(0,0)"></g>
+        <g id="body" transform="translate(20,20)"></g>
     </svg>
 </body>
 
@@ -54,7 +49,6 @@
             .text(d=> d.data.name)
             .attr("alignment-baseline", "hanging")
             .attr("fill", "white")
-
 
 
     }
