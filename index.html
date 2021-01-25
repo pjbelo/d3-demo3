@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>D3 Demo3</title>
+    <style>
+        .line{
+            fill: none;
+            stroke: blue;
+        }
+    </style>
 </head>
 
 
 <body>
-    <svg id="container" height="250" width="350" style="border: solid 1px black">
+    <svg id="container" height="300" width="500" style="border: solid 1px lightgrey">
         <g id="body" style="transform:translate(50px,0px)"></g>
-        <g id="yAxis"></g>
-        <g id="xAxis"></g>
     </svg>
 </body>
 
@@ -21,44 +25,49 @@
 <script>
 
     let body = d3.select("#body")
-    d3.csv("data/mydata.csv").then(showData)
+    d3.csv("data/prices.csv").then(showData)
 
-    function showData(clients) {
+    function showData(data) {
 
-        let max = d3.max(clients, d => d.weight)
+        let bodyHeight = 200
+        let bodyWidth = 400
 
-        let widthScale = d3.scaleLinear()
-            .range([0,200])
-            .domain([0,max])
+        data = data.map(d => ({
+            date: new Date(d.date),
+            price: +d.price
+        }))
 
-        let positionScale = d3.scaleBand()
-            .range([0,200])
-            .domain(clients.map(d => d.name))
-            .padding(0.3)
+        let maxPrice = d3.max(data, d => d.price)
 
-        let join = body
-            .selectAll("rect")
-            .data(clients)
+        let yScale = d3.scaleLinear()
+            .range([bodyHeight,0])
+            .domain([0,maxPrice])
 
-        join.enter()
-            .append("rect")
-            .attr("fill", "blue")
-            .attr("width", d => widthScale(d.weight) + "px")
-            .attr("height", positionScale.bandwidth())
-            .attr("y", d => positionScale(d.name))
+        let yAxis = d3.axisLeft(yScale)
 
+        body.append("g")
+            .call(yAxis)
 
-        let xAxis = d3.axisBottom(widthScale)
-            .ticks(5)
-            .tickFormat(d => d + " lb")
-        d3.select("#xAxis")
-            .attr("transform", "translate(50,200)")
+        let xScale = d3.scaleTime()
+            .range([0,bodyWidth])
+            .domain(d3.extent(data, d => d.date))
+
+        let xAxis = d3.axisBottom(xScale)
+            .tickFormat(d3.timeFormat("%b"))
+
+        body.append("g")
+            .attr("transform", "translate(0,"+bodyHeight+")")
             .call(xAxis)
 
-        let yAxis = d3.axisLeft(positionScale)
-        d3.select("#yAxis")
-        .attr("transform", "translate(50,0)")
-            .call(yAxis)
+        valueLine = d3.line()
+            .x(d => xScale(d.date))
+            .y(d => yScale(d.price))
+            .defined(d => !!d.price) // don't assume 0 if value not defined
+
+        body.append("path")
+            .datum(data) // use datum, not data -> only one data element
+            .attr("d", valueLine)
+            .attr("class","line")
 
 
 
