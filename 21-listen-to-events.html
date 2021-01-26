@@ -87,7 +87,7 @@
             .call(yAxis)
 
         d3.select("#container").on("mousemove", function (event, d) {
-            let x = d3.pointer(event)[0]-3
+            let x = d3.pointer(event)[0] - 3
             let y = event.y
             //console.log(x,y)
             line.attr("transform", `translate(${x},-10)`)
